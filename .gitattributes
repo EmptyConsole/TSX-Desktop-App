@@ -1,2 +1,4 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+version https://git-lfs.github.com/spec/v1
+oid sha256:8836991fba51098330ed47b5d982d0e25707c489a89abc8bc06e4cef69024d75
+size 224
+path/to/big/files filter=lfs diff=lfs merge=lfs -text
