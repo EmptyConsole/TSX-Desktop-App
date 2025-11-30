@@ -70,3 +70,5 @@ const CanvasAnimation: React.FC = () => {
 
 // Export the component as default
 export default CanvasAnimation;
+
+interface
