@@ -4,7 +4,6 @@ const CanvasAnimation: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   // Use useRef to store mutable values that persist across renders without causing re-renders
   const lastTimeRef = useRef(0);
-  const positionXRef = useRef(50); // Starting X position for our moving square
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -18,25 +17,7 @@ const CanvasAnimation: React.FC = () => {
     const update = (deltaTime: number) => {
       // Clear the canvas before drawing the next frame
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Update game state
-      // Move the square to the right at 100 pixels per second
-      positionXRef.current += 100 * deltaTime; 
-
-      // Wrap around if it goes off screen
-      if (positionXRef.current > canvas.width + 10) {
-        positionXRef.current = -10; 
-      }
-
-      // Draw the updated rectangle
-      ctx.fillStyle = 'blue';
-      ctx.fillRect(positionXRef.current, 50, 50, 50);
-
-      // Draw static shapes (they get redrawn every frame too)
-      ctx.beginPath();
-      ctx.arc(200, 100, 40, 0, Math.PI * 2);
-      ctx.fillStyle = 'red';
-      ctx.fill();
+      player.draw(ctx);
     };
 
     // --- 2. The Game Loop Function (The "gameLoop" from your original code) ---
@@ -65,10 +46,37 @@ const CanvasAnimation: React.FC = () => {
 
   }, []); // Empty dependency array ensures this runs only once on mount
 
-  return <canvas ref={canvasRef} width={300} height={200} style={{ border: '1px solid black' }} />;
+  return <canvas ref={canvasRef} width={800} height={600} style={{ border: '1px solid black' }} />;
 };
 
 // Export the component as default
 export default CanvasAnimation;
 
-interface
+class Player {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  color: string;
+  gravity: number;
+  yvelocity: number;
+
+  constructor(x: number, y: number, width: number, height: number, color: string,gravity: number) {
+    this.x = x;
+    this.y = y;
+    this.width = width;
+    this.height = height;
+    this.color = color;
+    this.gravity = gravity;
+    this.yvelocity = 0;
+  }
+  work(){
+    this.yvelocity += this.gravity;
+    this.y += this.yvelocity;
+  }
+  draw(ctx: CanvasRenderingContext2D) {
+    ctx.fillStyle = this.color;
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+  }
+}
+const player = new Player(20, 20, 30, 30, 'green', 1);
